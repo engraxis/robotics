@@ -1,0 +1,127 @@
+//Inputs
+int manualUnknown;   		//Unknown
+int manualGripper;   		//Gripper
+int manual_EE_Rotation;   	//EE Rotation
+int manual_VertXY;   		//Vertical Planer
+int manual_HorXY;   		//Horizontal Planer
+int manual_HorXZ;   		//Horizontal 3D
+
+//Outputs
+#define UNKNOWN		8
+#define GRIPPER		9
+#define EE_ROTATAION	10
+#define VERT_XY		11
+#define HOR_XY		12
+#define HOR_XZ		13
+
+//States
+#define UNKNOWN_ON	0x01
+#define UNKNOWN_OFF	0x00
+#define GRIPPER_ON	0x11
+#define GRIPPER_OFF	0x10
+#define EE_ROTATION_ON	0x21
+#define EE_ROTATION_OFF	0x20
+#define VERT_XY_ON	0x31
+#define VERT_XY_OFF	0x30
+#define HOR_XY_ON	0x41
+#define HOR_XY_OFF	0x40
+#define HOR_XZ_ON	0x51
+#define HOR_XZ_OFF	0x50
+
+int isManualON;
+int serialData;
+
+void setup() 
+{
+	// put your setup code here, to run once:
+	isManualON = 0;
+  	serialData = 0xFF;
+
+  	for(int x=2; x<8; x++)
+    		pinMode(x,INPUT);
+  	for(int y=8; y<14; y++)
+    		pinMode(y,OUTPUT);
+
+  	manualUnknown = manualGripper = manual_EE_Rotation = manual_VertXY = manual_HorXY = manual_HorXZ = 0;
+  	Serial.begin(115200);
+	Serial1.begin(115200)
+}
+
+void loop() 
+{
+  	// put your main code here, to run repeatedly:
+ 
+  	if(isManualON) 
+	{
+		manualUnknown		= digitalRead(2); Serial.print("manualUnknown = "); 		Serial.println(manualUnknown);
+  		manualGripper 		= digitalRead(3); Serial.print("manualGripper = "); 		Serial.println(manualGripper); 
+  		manual_EE_Rotation 	= digitalRead(4); Serial.print("manual_EE_Rotation = "); 	Serial.println(manual_EE_Rotation); 
+  		manual_VertXY 		= digitalRead(5); Serial.print("manual_VertXY = "); 		Serial.println(manual_VertXY); 
+  		manual_HorXY 		= digitalRead(6); Serial.print("manual_HorXY = "); 		Serial.println(manual_HorXY); 
+  		manual_HorXZ 		= digitalRead(7); Serial.print("manual_HorXZ = "); 		Serial.println(manual_HorXZ);
+
+  		if (manualUnknown == HIGH)
+			digitalWrite(UNKNOWN, HIGH);
+  		else
+    			digitalWrite(UNKNOWN, LOW);
+   
+  		if (manualGripper == HIGH)
+   	 		digitalWrite(GRIPPER,HIGH);  
+  		else
+    			digitalWrite(GRIPPER, LOW);
+
+  		if (manual_EE_Rotation == HIGH)
+    			digitalWrite(EE_ROTATAION,HIGH);  
+  		else
+    			digitalWrite(EE_ROTATAION, LOW);
+
+  		if (manual_VertXY == HIGH)
+    			digitalWrite(VERT_XY, HIGH);  
+  		else
+    			digitalWrite(VERT_XY, LOW);
+  
+  		if (manual_HorXY == HIGH)
+    			digitalWrite(HOR_XY, HIGH);  
+  		else
+    			digitalWrite(HOR_XY, LOW);
+
+  		if (manual_HorXZ == HIGH)
+    			digitalWrite(13, HIGH);  
+  		else
+    			digitalWrite(HOR_XZ, LOW);
+	}
+  	else if(serial1.available() && !isManualON)
+	{
+		serialData = serial1.read();
+
+  		if(serialData == UNKNOWN_ON)
+			digitalWrite(UNKNOWN, HIGH);
+		else if(if(serialData == UNKNOWN_OFF)
+			digitalWrite(UNKNOWN, LOW);
+
+  		if(serialData == GRIPPER_ON)
+			digitalWrite(GRIPPER, HIGH);
+		else if(if(serialData == GRIPPER_OFF)
+			digitalWrite(GRIPPER, LOW);
+
+  		if(serialData == EE_ROTATION_ON)
+			digitalWrite(EE_ROTATION, HIGH);
+		else if(if(serialData == EE_ROTATION_OFF)
+			digitalWrite(EE_ROTATION, LOW);
+
+  		if(serialData == VERT_XY_ON)
+			digitalWrite(VERT_XY, HIGH);
+		else if(if(serialData == VERT_XY_OFF)
+			digitalWrite(VERT_XY, LOW);
+
+  		if(serialData == HOR_XY_ON)
+			digitalWrite(HOR_XY, HIGH);
+		else if(if(serialData == HOR_XY_OFF)
+			digitalWrite(HOR_XY, LOW);
+
+  		if(serialData == HOR_XZ_ON)
+			digitalWrite(HOR_XZ, HIGH);
+		else if(if(serialData == HOR_XZ_OFF)
+			digitalWrite(HOR_XZ, LOW);
+  	}
+}
